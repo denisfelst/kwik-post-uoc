@@ -47,8 +47,7 @@ const handleLogin = async () => {
 
     authStore.login({ user: data.data.user, token: data.data.token });
 
-    // Redirect to the original intended route or home
-    const redirectPath = "/";
+    const redirectPath = "/profile/" + data.data.user.username;
     router.push(redirectPath);
   } catch (err) {
     error.value = err.response?.data?.message || "Invalid credentials";

@@ -1,9 +1,39 @@
 <template>
   <div class="home">
     <template v-if="authStore.isAuthenticated">
-      <h1>Main Feed</h1>
-      <!-- Add your feed content here -->
+      <h1>Posts Feed - displaying {{ posts.length }} of {{ total }}</h1>
+
+      <!-- Loading state -->
+      <div v-if="isLoadingMore">Loading posts...</div>
+
+      <!-- Error state -->
+      <div v-else-if="error">{{ error }}</div>
+
+      <!-- Posts list -->
+      <div v-else>
+        <div v-for="post in posts" :key="post.id" class="post">
+          <h2>{{ post.title }}</h2>
+          <p>{{ post.content }}</p>
+          <div class="post-meta">
+            <span>By: {{ post.author }}</span>
+            <span
+              >Posted: {{ new Date(post.createdAt).toLocaleDateString() }}</span
+            >
+          </div>
+          <router-link :to="'/post/' + post.id">Read more</router-link>
+        </div>
+
+        <!-- Load more button -->
+        <button
+          v-if="hasMorePosts"
+          @click="loadPosts"
+          :disabled="isLoadingMore"
+        >
+          {{ isLoadingMore ? "Loading more..." : "Load more" }}
+        </button>
+      </div>
     </template>
+
     <template v-else>
       <h3>
         <router-link to="/login">Login</router-link> to connect with your
@@ -14,13 +44,51 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
+import api from "../api/axios";
 import { useAuthStore } from "../stores/auth";
 
 const authStore = useAuthStore();
-</script>
 
-<style scoped>
-/* .home {
-  padding: 20px;
-} */
-</style>
+const posts = ref([]);
+const isLoadingMore = ref(false);
+const error = ref(null);
+const offset = ref(0);
+const limit = 10;
+const hasMorePosts = ref(true);
+const total = ref(0);
+
+const loadPosts = async () => {
+  if (isLoadingMore.value) return;
+
+  isLoadingMore.value = true;
+
+  try {
+    const { data } = await api.get(
+      `/posts?limit=${limit}&offset=${offset.value}`
+    );
+
+    if (!data || data.result.length === 0) {
+      hasMorePosts.value = false;
+      return;
+    }
+
+    if (posts.value.length === 0) {
+      total.value = data.paginator.total;
+      posts.value = data.result;
+    } else {
+      posts.value = [...posts.value, ...data.result];
+    }
+  } catch (err) {
+    error.value = "Failed to load more posts. Please try again.";
+  } finally {
+    isLoadingMore.value = false;
+    offset.value += limit;
+    hasMorePosts.value = posts.value.length < total.value;
+  }
+};
+
+onMounted(() => {
+  loadPosts();
+});
+</script>

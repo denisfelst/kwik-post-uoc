@@ -23,7 +23,7 @@ const handleLogout = () => {
         <img src="@/assets/vue.svg" alt="logo" />
       </router-link>
       <template v-if="authStore.isAuthenticated">
-        <router-link to="/post/form">New Post</router-link> |
+        <router-link to="/post/form">New Post</router-link>
       </template>
     </header>
     <main>
