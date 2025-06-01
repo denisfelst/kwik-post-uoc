@@ -24,6 +24,7 @@
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import api from "../api/axios";
 
 const router = useRouter();
 const route = useRoute();
@@ -39,29 +40,18 @@ const handleLogin = async () => {
   isLoading.value = true;
 
   try {
-    const response = await fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username.value,
-        password: password.value,
-      }),
+    const data = await api.post("/login", {
+      username: username.value,
+      password: password.value,
     });
 
-    if (!response.ok) {
-      throw new Error("Invalid credentials");
-    }
-
-    const data = await response.json();
-    authStore.login(data);
+    authStore.login({ data });
 
     // Redirect to the original intended route or home
     const redirectPath = route.query.redirect || "/";
     router.push(redirectPath);
   } catch (err) {
-    error.value = err.message || "An error occurred during login";
+    error.value = err.response?.data?.message || "Invalid credentials";
   } finally {
     isLoading.value = false;
   }

@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.profile {
+/* .profile {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
@@ -56,6 +56,7 @@ onMounted(() => {
 }
 
 .user-posts {
-  margin-top: 30px;
+  margin-top: 30px; 
 }
+*/
 </style>

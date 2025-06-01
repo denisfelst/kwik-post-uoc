@@ -39,7 +39,7 @@ const handleSubmit = () => {
 </script>
 
 <style scoped>
-.post-form {
+/* .post-form {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
@@ -76,5 +76,5 @@ button {
 
 button:hover {
   background-color: #45a049;
-}
+} */
 </style>

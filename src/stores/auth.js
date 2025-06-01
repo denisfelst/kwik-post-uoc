@@ -12,7 +12,6 @@ export const useAuthStore = defineStore("auth", {
       this.isAuthenticated = true;
       this.user = user;
       this.token = token;
-      // Store token in localStorage for persistence
       localStorage.setItem("auth_token", token);
     },
 

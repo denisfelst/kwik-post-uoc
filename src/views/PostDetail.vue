@@ -34,7 +34,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.post-detail {
+/* .post-detail {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
@@ -52,5 +52,5 @@ onMounted(() => {
 .post-body {
   margin-top: 20px;
   line-height: 1.6;
-}
+} */
 </style>

@@ -18,21 +18,30 @@ const handleLogout = () => {
 
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
+    <header>
+      <router-link to="/">
+        <img src="@/assets/vue.svg" alt="logo" />
+      </router-link>
       <template v-if="authStore.isAuthenticated">
         <router-link to="/post/form">New Post</router-link> |
-        <router-link :to="'/profile/' + authStore.user?.username"
-          >Profile</router-link
-        >
-        |
-        <a href="#" @click.prevent="handleLogout">Logout</a>
       </template>
-      <template v-else>
-        <router-link to="/login">Login</router-link>
-      </template>
-    </nav>
-    <router-view></router-view>
+    </header>
+    <main>
+      <router-view></router-view>
+    </main>
+    <footer>
+      <nav>
+        <router-link to="/">Home</router-link> |
+        <template v-if="authStore.isAuthenticated">
+          <router-link :to="'/profile/' + authStore.user?.username"
+            >Profile</router-link
+          >
+        </template>
+        <template v-else>
+          <router-link to="/login">login</router-link>
+        </template>
+      </nav>
+    </footer>
   </div>
 </template>
 
@@ -57,5 +66,18 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer {
+  /* width: 100%; */
+  bottom: 0;
+  position: fixed;
 }
 </style>

@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
-import HomeView from "../views/HomeView.vue";
-import LoginView from "../views/LoginView.vue";
-import PostFormView from "../views/PostFormView.vue";
-import PostDetailView from "../views/PostDetailView.vue";
-import ProfileView from "../views/ProfileView.vue";
+import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
+import PostForm from "../views/PostForm.vue";
+import PostDetail from "../views/PostDetail.vue";
+import Profile from "../views/Profile.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,35 +13,35 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView,
+      component: Home,
     },
     {
       path: "/login",
       name: "login",
-      component: LoginView,
+      component: Login,
     },
     {
       path: "/post/form/:id?",
       name: "post-form",
-      component: PostFormView,
+      component: PostForm,
       meta: { requiresAuth: true },
     },
     {
       path: "/post/:id",
       name: "post-detail",
-      component: PostDetailView,
+      component: PostDetail,
       meta: { requiresAuth: true },
     },
     {
       path: "/profile/:username",
       name: "profile",
-      component: ProfileView,
+      component: Profile,
       meta: { requiresAuth: true },
     },
   ],
 });
 
-// Navigation guard
+// Navigation guard: triggers before each route change
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
