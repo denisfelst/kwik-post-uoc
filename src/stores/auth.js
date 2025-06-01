@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     login({ user, token }) {
+      console.log("login", user, token);
       this.isAuthenticated = true;
       this.user = user;
       this.token = token;

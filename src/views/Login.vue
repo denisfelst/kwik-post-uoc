@@ -45,10 +45,10 @@ const handleLogin = async () => {
       password: password.value,
     });
 
-    authStore.login({ data });
+    authStore.login({ user: data.data.user, token: data.data.token });
 
     // Redirect to the original intended route or home
-    const redirectPath = route.query.redirect || "/";
+    const redirectPath = "/";
     router.push(redirectPath);
   } catch (err) {
     error.value = err.response?.data?.message || "Invalid credentials";
