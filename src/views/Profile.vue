@@ -73,7 +73,6 @@ const loadPosts = async () => {
     const { data } = await api.get(
       `/user/${route.params.username}/posts?limit=${limit}&offset=${offset.value}`
     );
-    console.log("-> ", data);
 
     if (!data || data.result.length === 0) {
       hasMorePosts.value = false;
@@ -93,7 +92,6 @@ const loadPosts = async () => {
       joinDate: new Date().toLocaleDateString(),
     };
   } catch (err) {
-    console.log("-> ", err);
     error.value = "Failed to load more posts. Please try again.";
   } finally {
     isLoadingMore.value = false;
@@ -103,7 +101,6 @@ const loadPosts = async () => {
 };
 
 onMounted(() => {
-  console.log("on mounted");
   loadPosts();
 });
 </script>
