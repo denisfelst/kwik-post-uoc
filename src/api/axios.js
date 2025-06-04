@@ -14,8 +14,8 @@ api.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore();
     if (authStore.token) {
-      // in every request, we add the token to the headers
-      config.headers.Authorization = `Bearer ${authStore.token}`;
+      // Send just the token without 'Bearer'
+      config.headers.Authorization = authStore.token;
     }
     return config;
   },
@@ -26,7 +26,11 @@ api.interceptors.request.use(
 
 // Response interceptor for API calls
 api.interceptors.response.use(
-  (response) => response,
+  async (response) => {
+    // Add artificial delay of 1500ms
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    return response;
+  },
   async (error) => {
     const authStore = useAuthStore();
 

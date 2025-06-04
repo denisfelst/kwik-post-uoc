@@ -75,7 +75,7 @@ const loadPosts = async () => {
     }
 
     if (posts.value.length === 0) {
-      totalPosts.value = data.paginator.totalPosts;
+      totalPosts.value = data.paginator.total;
       posts.value = data.result;
     } else {
       posts.value = [...posts.value, ...data.result];
