@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <template v-if="authStore.isAuthenticated">
-      <h1>Posts Feed - displaying {{ posts.length }} of {{ total }}</h1>
+      <h1>Posts Feed - displaying {{ posts.length }} of {{ totalPosts }}</h1>
 
       <!-- Loading state -->
       <div v-if="isLoadingMore">Loading posts...</div>
@@ -48,15 +48,16 @@ import { ref, onMounted } from "vue";
 import api from "../api/axios";
 import { useAuthStore } from "../stores/auth";
 
+const limit = 10;
+
 const authStore = useAuthStore();
 
 const posts = ref([]);
 const isLoadingMore = ref(false);
 const error = ref(null);
 const offset = ref(0);
-const limit = 10;
 const hasMorePosts = ref(true);
-const total = ref(0);
+const totalPosts = ref(0);
 
 const loadPosts = async () => {
   if (isLoadingMore.value) return;
@@ -74,7 +75,7 @@ const loadPosts = async () => {
     }
 
     if (posts.value.length === 0) {
-      total.value = data.paginator.total;
+      totalPosts.value = data.paginator.totalPosts;
       posts.value = data.result;
     } else {
       posts.value = [...posts.value, ...data.result];
@@ -84,7 +85,7 @@ const loadPosts = async () => {
   } finally {
     isLoadingMore.value = false;
     offset.value += limit;
-    hasMorePosts.value = posts.value.length < total.value;
+    hasMorePosts.value = posts.value.length < totalPosts.value;
   }
 };
 

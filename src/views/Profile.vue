@@ -10,7 +10,11 @@
       </div>
       <div class="user-posts">
         <h2>Recent Posts</h2>
-        <!-- Add user posts list here -->
+        <!-- Loading state -->
+        <div v-if="isLoadingMore">Loading posts...</div>
+
+        <!-- Error state -->
+        <div v-else-if="error">{{ error }}</div>
       </div>
     </div>
     <div v-else>Loading...</div>
@@ -21,17 +25,59 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
+const limit = 10;
+
 const route = useRoute();
+
 const profile = ref(null);
+const posts = ref([]);
+const offset = ref(0);
+const isLoadingMore = ref(false);
+const hasMorePosts = ref(true);
+const totalPosts = ref(0);
+const error = ref(null);
+
+const loadPosts = async () => {
+  if (isLoadingMore.value) return;
+
+  isLoadingMore.value = true;
+
+  try {
+    console.log("-> ", route.params.username);
+    const { data } = await api.get(
+      `/user/${route.params.username}/posts?limit=${limit}&offset=${offset.value}`
+    );
+
+    console.log("-> ", data);
+    // if (!data || data.result.length === 0) {
+    //   hasMorePosts.value = false;
+    //   return;
+    // }
+
+    // if (posts.value.length === 0) {
+    //   totalPosts.value = data.paginator.totalPosts;
+    //   posts.value = data.result;
+    // } else {
+    //   posts.value = [...posts.value, ...data.result];
+    // }
+
+    // profile.value = {
+    //   username: route.params.username,
+    //   posts: posts.value.length,
+    //   joinDate: new Date().toLocaleDateString(),
+    // };
+  } catch (err) {
+    error.value = "Failed to load more posts. Please try again.";
+  } finally {
+    isLoadingMore.value = false;
+    offset.value += limit;
+    hasMorePosts.value = posts.value.length < totalPosts.value;
+  }
+};
 
 onMounted(() => {
-  // Add logic to fetch profile data using route.params.username
-  // For now, we'll use dummy data
-  profile.value = {
-    username: route.params.username,
-    posts: 0,
-    joinDate: new Date().toLocaleDateString(),
-  };
+  console.log("on mounted");
+  loadPosts();
 });
 </script>
 
