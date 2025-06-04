@@ -1,13 +1,23 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { useAuthStore } from "./stores/auth";
 import { useRouter } from "vue-router";
 
 const authStore = useAuthStore();
 const router = useRouter();
 
+const handleAuthExpired = () => {
+  authStore.logout();
+  router.push("/login");
+};
+
 onMounted(() => {
   authStore.initializeAuth();
+  window.addEventListener("auth:expired", handleAuthExpired);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("auth:expired", handleAuthExpired);
 });
 
 const handleLogout = () => {

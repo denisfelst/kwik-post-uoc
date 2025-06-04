@@ -1,8 +1,5 @@
 <template>
   <div class="profile">
-    {{ isLoadingMore }}
-    {{ error ?? "---" }}
-    {{ profile?.username }}
     <!-- Loading state -->
     <div v-if="isLoadingMore">Loading posts...</div>
 
@@ -52,10 +49,12 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import api from "../api/axios";
+import { useAuthStore } from "../stores/auth";
 
 const limit = 10;
 
 const route = useRoute();
+const authStore = useAuthStore();
 
 const profile = ref(null);
 const posts = ref([]);
