@@ -1,5 +1,9 @@
 <template>
   <div class="profile">
+    <div v-if="route.params.username === authStore.user.username">
+      <button @click="handleLogout">logout</button>
+    </div>
+
     <!-- Loading state -->
     <div v-if="isLoadingMore">Loading posts...</div>
 
@@ -47,13 +51,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import api from "../api/axios";
 import { useAuthStore } from "../stores/auth";
 
 const limit = 10;
 
 const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
 
 const profile = ref(null);
@@ -98,6 +103,11 @@ const loadPosts = async () => {
     offset.value += limit;
     hasMorePosts.value = posts.value.length < totalPosts.value;
   }
+};
+
+const handleLogout = () => {
+  authStore.logout();
+  router.push("/");
 };
 
 onMounted(() => {

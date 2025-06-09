@@ -9,11 +9,13 @@
           id="content"
           v-model="content"
           rows="6"
-          :placeholder="isLoading ? 'Loading post...' : ''"
+          :placeholder="
+            isLoading ? 'Loading post...' : 'Share your thoughts...'
+          "
           required
         ></textarea>
       </div>
-      <button type="submit">{{ isEditing ? "Update" : "Publish" }}</button>
+      <button type="submit">{{ isEditing ? "Update" : "Share" }}</button>
     </form>
   </div>
 </template>
@@ -24,6 +26,8 @@ import { useRoute, useRouter } from "vue-router";
 import api from "../api/axios";
 
 const route = useRoute();
+const router = useRouter();
+
 const content = ref("");
 const error = ref(false);
 const isEditing = ref(false);
@@ -44,10 +48,15 @@ onMounted(async () => {
 const handleSubmit = async () => {
   try {
     const body = { content: content.value };
-    await api.put(`/post/${route.params.id}`, body);
+    if (isEditing.value) {
+      await api.put(`/post/${route.params.id}`, body);
+    } else {
+      await api.post("/post", { content: content.value });
+    }
+    router.push("/");
   } catch (err) {
     error.value = true;
-    console.error("Error editing post: ", err);
+    console.error("Error handling post: ", err);
   }
 };
 </script>

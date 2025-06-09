@@ -142,9 +142,9 @@ const handleReply = async () => {
     await api.post(`/post/${post.value.id}/reply`, {
       content: replyContent.value,
     });
-    // Refresh post data to get new reply
+
     await fetchPost();
-    // Reset reply form
+
     cancelReply();
   } catch (err) {
     console.error("Error submitting reply:", err);
