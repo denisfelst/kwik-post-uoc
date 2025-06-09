@@ -68,7 +68,7 @@
             @click="handleReply"
             :disabled="isSubmittingReply || !replyContent.trim()"
           >
-            {{ isSubmittingReply ? "Sending..." : "Send Reply" }}
+            {{ isSubmittingReply ? "Sending..." : "Send" }}
           </button>
           <button @click="cancelReply">Cancel</button>
         </div>
@@ -129,6 +129,7 @@ const fetchPost = async () => {
   try {
     const { data } = await api.get(`/post/${route.params.id}`);
     post.value = data;
+    console.log("post.value ::: ", post.value);
   } catch (err) {
     error.value = "Failed to load post. Please try again later.";
     console.error("Error fetching post:", err);
