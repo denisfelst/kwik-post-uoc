@@ -6,6 +6,10 @@ export const useAuthStore = defineStore("auth", {
     isAuthenticated: false,
     user: null,
     token: null,
+    profileImg: null,
+    registrationDate: null,
+    surname: null,
+    username: null,
   }),
 
   actions: {
@@ -14,6 +18,10 @@ export const useAuthStore = defineStore("auth", {
       this.isAuthenticated = true;
       this.user = user;
       this.token = token;
+      this.profileImg = user.profileImg;
+      this.registrationDate = user.registrationDate;
+      this.surname = user.surname;
+      this.username = user.username;
       // Set token in API instance
       setAuthToken(token);
       // Store token in localStorage for persistence
@@ -24,6 +32,10 @@ export const useAuthStore = defineStore("auth", {
       this.isAuthenticated = false;
       this.user = null;
       this.token = null;
+      this.profileImg = null;
+      this.registrationDate = null;
+      this.surname = null;
+      this.username = null;
       // Remove token from API instance
       setAuthToken(null);
       // Remove token from localStorage

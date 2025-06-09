@@ -1,19 +1,19 @@
 <template>
   <div class="login">
     <h1>Login</h1>
-    <form @submit.prevent="handleLogin">
+    <form @submit.prevent="handleLogin" class="input-group">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">Username </label>
         <input type="text" id="username" v-model="username" required />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Password </label>
         <input type="password" id="password" v-model="password" required />
       </div>
       <div v-if="error" class="error-message">
         {{ error }}
       </div>
-      <button type="submit" :disabled="isLoading">
+      <button type="submit" class="btn btn--cta" :disabled="isLoading">
         {{ isLoading ? "Logging in..." : "Login" }}
       </button>
     </form>
@@ -58,49 +58,10 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-.login {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:not(:disabled):hover {
-  background-color: #45a049;
-}
-
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.error-message {
-  color: #dc3545;
-  margin-bottom: 15px;
-  font-size: 0.9em;
+/* Login form container */
+form {
+  display: grid;
+  place-items: center;
+  gap: 20px;
 }
 </style>

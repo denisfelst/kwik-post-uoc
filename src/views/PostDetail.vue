@@ -4,10 +4,10 @@
     <div v-if="isLoading">Loading post...</div>
 
     <!-- Error state -->
-    <div v-else-if="error">{{ error }}</div>
+    <div v-else-if="error" class="error">{{ error }}</div>
 
     <!-- Post content -->
-    <div v-else-if="post" class="post-content">
+    <div v-else-if="post" class="main-post">
       <!-- Author info section -->
       <div class="author-info">
         <router-link :to="`/profile/${post.user.username}`">
@@ -20,7 +20,9 @@
             <span class="author-name"
               >{{ post.user.name }} {{ post.user.surname }}</span
             >
-            <span class="author-username">@{{ post.user.username }}</span>
+            <span class="author-username has-color-grey has-text-small"
+              >@{{ post.user.username }}</span
+            >
           </div>
         </router-link>
       </div>
@@ -32,21 +34,26 @@
 
       <!-- Post metadata -->
       <div class="post-meta">
-        <span class="post-date">
+        <span class="post-date has-color-light has-text-small">
           {{ new Date(post.publishDate).toLocaleString() }}
         </span>
         <div class="post-stats">
-          <span class="likes">{{ post.nLikes }} likes</span>
-          <span class="replies">{{ post.nReplies }} replies</span>
+          <span class="likes has-color-grey">{{ post.nLikes }} likes</span>
+          <span class="replies has-color-grey"
+            >{{ post.nReplies }} replies</span
+          >
         </div>
       </div>
 
       <!-- Action buttons -->
-      <div class="post-actions">
-        <button @click="isReplyFormVisible = !isReplyFormVisible">Reply</button>
+      <div class="actions-wrapper">
+        <button class="btn" @click="isReplyFormVisible = !isReplyFormVisible">
+          Reply
+        </button>
         <!-- Edit button only for post author -->
         <button
           v-if="isCurrentUserPost"
+          class="btn"
           @click="$router.push(`/post/form/${post.id}`)"
         >
           Edit
@@ -62,17 +69,18 @@
         ></textarea>
         <div class="reply-actions">
           <button
+            class="btn btn--cta"
             @click="handleReply"
             :disabled="isSubmittingReply || !replyContent.trim()"
           >
             {{ isSubmittingReply ? "Sending..." : "Send" }}
           </button>
-          <button @click="cancelReply">Cancel</button>
+          <button class="btn" @click="cancelReply">Cancel</button>
         </div>
       </div>
 
       <!-- Replies section -->
-      <div v-if="post.replies.length > 0" class="replies-section">
+      <div v-if="post.replies.length > 0" class="replies-list">
         <h3>Replies</h3>
         <div v-for="reply in post.replies" :key="reply.id" class="reply">
           <div class="reply-author">
@@ -162,3 +170,33 @@ onMounted(() => {
   fetchPost();
 });
 </script>
+
+<style scoped>
+/* Post style in this view */
+.main-post {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+}
+
+/* Wrapper for actions like remove post or edit post */
+.actions-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+/* Replies list style */
+.replies-list {
+  margin: 0 20px;
+}
+
+.reply {
+  padding: 10px 5px;
+}
+
+.reply:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+}
+</style>

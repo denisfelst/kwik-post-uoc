@@ -7,20 +7,37 @@
       <div v-if="isLoadingMore">Loading posts...</div>
 
       <!-- Error state -->
-      <div v-else-if="error">{{ error }}</div>
+      <div v-else-if="error" class="error">{{ error }}</div>
 
       <!-- Posts list -->
       <div v-else>
-        <div v-for="post in posts" :key="post.id" class="post">
-          <h2>{{ post.title }}</h2>
-          <p>{{ post.content }}</p>
-          <div class="post-meta">
-            <span>By: {{ post.author }}</span>
-            <span
-              >Posted: {{ new Date(post.createdAt).toLocaleDateString() }}</span
-            >
+        <div class="posts-list">
+          <div v-for="post in posts" :key="post.id" class="post">
+            <router-link :to="'/post/' + post.id">
+              <div class="user-info">
+                <img
+                  class="user-info__avatar"
+                  :src="post.user.profileImg"
+                  :alt="`profile img of ${post.user.username}`"
+                />
+
+                <div class="user-info__user">
+                  <span>{{ post.user.name }} {{ post.user.surname }}</span>
+                  <span class="username">@{{ post.user.username }}</span>
+                </div>
+              </div>
+              <div class="post-detail">
+                <p>{{ post.content }}</p>
+                <p class="time">
+                  {{ new Date(post.publishDate).toLocaleString() }}
+                </p>
+              </div>
+              <div class="interactions">
+                <span class="icon">{{ post.nLikes ?? "0" }} Likes</span
+                ><span class="icon">{{ post.nReplies ?? "0" }} Replies</span>
+              </div>
+            </router-link>
           </div>
-          <router-link :to="'/post/' + post.id">Read more</router-link>
         </div>
 
         <!-- Load more button -->
@@ -28,6 +45,7 @@
           v-if="hasMorePosts"
           @click="loadPosts"
           :disabled="isLoadingMore"
+          class="btn"
         >
           {{ isLoadingMore ? "Loading more..." : "Load more" }}
         </button>
@@ -68,6 +86,7 @@ const loadPosts = async () => {
     const { data } = await api.get(
       `/posts?limit=${limit}&offset=${offset.value}`
     );
+    console.log("data::: ", data);
 
     if (!data || data.result.length === 0) {
       hasMorePosts.value = false;
@@ -93,3 +112,102 @@ onMounted(() => {
   loadPosts();
 });
 </script>
+
+<style scoped>
+/******************************* POST *******************************/
+
+/* Post container */
+.post {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  margin: 4px 8px;
+  /* border-bottom: 1px solid #e0e0e0; */
+}
+
+/* Link inside a post */
+.post a {
+  text-decoration: none;
+  color: inherit !important;
+}
+
+/* Post user info container */
+.user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.user-info__user {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info__user .username {
+  font-size: 12px;
+  color: #555;
+}
+
+.user-info__avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+/* Post content container */
+.post-detail {
+  margin-bottom: 10px;
+}
+
+.post-detail p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.post-detail .time {
+  font-size: 12px;
+}
+
+/* Contains likes and replies count and buttons*/
+.interactions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.interactions .icon {
+  font-size: 12px;
+  color: #555;
+}
+
+/******************************* PAGINATED POSTS LIST *******************************/
+
+/* Posts list container */
+.posts-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Post container */
+
+.post {
+  margin-top: 10px;
+}
+
+.post:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 20px;
+}
+
+/* Load more posts button */
+.btn.load-more {
+  margin: 10px auto;
+  min-width: 200px;
+}
+</style>
