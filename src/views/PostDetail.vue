@@ -43,9 +43,6 @@
 
       <!-- Action buttons -->
       <div class="post-actions">
-        <button @click="handleLike" :disabled="isLiking">
-          {{ isLiking ? "Liking..." : "Like" }}
-        </button>
         <button @click="isReplyFormVisible = !isReplyFormVisible">Reply</button>
         <!-- Edit button only for post author -->
         <button
@@ -129,26 +126,11 @@ const fetchPost = async () => {
   try {
     const { data } = await api.get(`/post/${route.params.id}`);
     post.value = data;
-    console.log("post.value ::: ", post.value);
   } catch (err) {
     error.value = "Failed to load post. Please try again later.";
     console.error("Error fetching post:", err);
   } finally {
     isLoading.value = false;
-  }
-};
-
-const handleLike = async () => {
-  if (isLiking.value) return;
-
-  isLiking.value = true;
-  try {
-    await api.post(`/post/${post.value.id}/like`);
-    post.value.nLikes++;
-  } catch (err) {
-    console.error("Error liking post:", err);
-  } finally {
-    isLiking.value = false;
   }
 };
 
