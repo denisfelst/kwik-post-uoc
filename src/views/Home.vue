@@ -86,7 +86,6 @@ const loadPosts = async () => {
     const { data } = await api.get(
       `/posts?limit=${limit}&offset=${offset.value}`
     );
-    console.log("data::: ", data);
 
     if (!data || data.result.length === 0) {
       hasMorePosts.value = false;
@@ -100,7 +99,7 @@ const loadPosts = async () => {
       posts.value = [...posts.value, ...data.result];
     }
   } catch (err) {
-    error.value = "Failed to load more posts. Please try again.";
+    console.error("Error loading posts:", err);
   } finally {
     isLoadingMore.value = false;
     offset.value += limit;
