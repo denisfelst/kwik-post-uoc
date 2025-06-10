@@ -58,6 +58,9 @@
         >
           Edit
         </button>
+        <button v-if="isCurrentUserPost" class="btn" @click="handleDelete">
+          Delete
+        </button>
       </div>
 
       <!-- Reply form -->
@@ -161,6 +164,14 @@ const handleReply = async () => {
   }
 };
 
+const handleDelete = async () => {
+  try {
+    await api.delete(`/post/${post.value.id}`);
+    router.push("/");
+  } catch (err) {
+    console.error("Error deleting post:", err);
+  }
+};
 const cancelReply = () => {
   isReplyFormVisible.value = false;
   replyContent.value = "";
