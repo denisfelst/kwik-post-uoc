@@ -12,11 +12,32 @@
           <div class="user-info__avatar">
             <img :src="authStore.profileImg" alt="profile picture of user" />
           </div>
-          <div class="user-info__username"></div>
+          <div class="user-info__fullname">
+            <span>{{ authStore.user.name }} {{ authStore.user.surname }}</span>
+          </div>
+          <div class="user-info__username">
+            <span>@{{ authStore.user.username }}</span>
+          </div>
+          <div class="user-info__bio">
+            <span
+              >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Quisquam, quos.</span
+            >
+          </div>
+          <div class="user-info__join-date">
+            <span
+              >Joined in
+              {{
+                new Date(authStore.registrationDate).toLocaleString("en-US", {
+                  month: "long",
+                  year: "numeric",
+                })
+              }}</span
+            >
+          </div>
         </div>
 
-        <div class="user-posts">
-          <h2>Recent Posts - {{ posts.length }} of {{ totalPosts }}</h2>
+        <div class="posts">
           <div v-for="post in posts" :key="post.id" class="post">
             <router-link :to="'/post/' + post.id">
               <div class="post-detail">
@@ -204,20 +225,51 @@ onMounted(() => {
 
 /* Header of the profile page */
 .user-info {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  width: 100%;
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
   position: relative;
 }
 
-/* Avatar */
-.user-info__avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+.user-info__fullname {
+  font-weight: 600;
 }
 
+.user-info__username {
+  font-size: 12px;
+  color: #555;
+}
+
+.user-info__bio {
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.user-info__join-date {
+  font-size: 12px;
+  color: #555;
+}
+
+/* Avatar */
+.user-info__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.user-info__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Logout button */
 /* Logout button */
 .btn--logout {
   position: absolute;

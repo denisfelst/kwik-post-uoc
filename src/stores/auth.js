@@ -8,6 +8,7 @@ export const useAuthStore = defineStore("auth", {
     token: null,
     profileImg: null,
     registrationDate: null,
+    name: null,
     surname: null,
     username: null,
   }),
@@ -20,6 +21,7 @@ export const useAuthStore = defineStore("auth", {
       this.token = token;
       this.profileImg = user.profileImg;
       this.registrationDate = user.registrationDate;
+      this.name = user.name;
       this.surname = user.surname;
       this.username = user.username;
       // Set token in API instance

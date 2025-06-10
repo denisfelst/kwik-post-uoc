@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <template v-if="authStore.isAuthenticated">
-      <h1>Posts Feed - displaying {{ posts.length }} of {{ totalPosts }}</h1>
+      <h1>Feed</h1>
+      <p>({{ posts.length }} of {{ totalPosts }})</p>
 
       <!-- Loading state -->
       <div v-if="isLoadingMore">Loading posts...</div>
@@ -15,16 +16,20 @@
           <div v-for="post in posts" :key="post.id" class="post">
             <router-link :to="'/post/' + post.id">
               <div class="user-info">
-                <img
-                  class="user-info__avatar"
-                  :src="post.user.profileImg"
-                  :alt="`profile img of ${post.user.username}`"
-                />
+                <router-link :to="'/profile/' + post.user.username">
+                  <img
+                    class="user-info__avatar"
+                    :src="post.user.profileImg"
+                    :alt="`profile img of ${post.user.username}`"
+                  />
+                </router-link>
 
-                <div class="user-info__user">
-                  <span>{{ post.user.name }} {{ post.user.surname }}</span>
-                  <span class="username">@{{ post.user.username }}</span>
-                </div>
+                <router-link :to="'/profile/' + post.user.username">
+                  <div class="user-info__user">
+                    <span> {{ post.user.name }} {{ post.user.surname }} </span>
+                    <span class="username">@{{ post.user.username }}</span>
+                  </div>
+                </router-link>
               </div>
               <div class="post-detail">
                 <p>{{ post.content }}</p>
