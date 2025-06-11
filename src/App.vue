@@ -19,42 +19,47 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("auth:expired", handleAuthExpired);
 });
-
-const handleLogout = () => {
-  authStore.logout();
-  router.push("/login");
-};
 </script>
 
 <template>
-  <div id="app">
-    <header>
+  <header>
+    <router-link to="/">
+      <img src="@/assets/icon.png" alt="logo" />
+    </router-link>
+
+    <template v-if="authStore.isAuthenticated">
+      <router-link to="/post/form"
+        ><button class="btn new-post">New Post</button></router-link
+      >
+    </template>
+  </header>
+  <main>
+    <router-view></router-view>
+  </main>
+  <footer>
+    <nav class="menu">
       <router-link to="/">
-        <img src="@/assets/vue.svg" alt="logo" />
+        <img src="@/assets/house.png" alt="home" class="nav-profile-img" />
       </router-link>
       <template v-if="authStore.isAuthenticated">
-        <router-link to="/post/form"
-          ><button class=".btn.new-post">New Post</button></router-link
-        >
+        |
+        <router-link :to="'/profile/' + authStore.user?.username">
+          <template v-if="authStore.profileImg">
+            <img
+              :src="authStore.profileImg"
+              alt="profile"
+              class="nav-profile-img"
+            />
+          </template>
+          <template v-else>
+            <img
+              src="@/assets/no-user.png"
+              alt="profile"
+              class="nav-profile-img" /></template
+        ></router-link>
       </template>
-    </header>
-    <main>
-      <router-view></router-view>
-    </main>
-    <footer>
-      <nav class="menu">
-        <router-link to="/">Home</router-link> |
-        <template v-if="authStore.isAuthenticated">
-          <router-link :to="'/profile/' + authStore.user?.username"
-            >Profile</router-link
-          >
-        </template>
-        <template v-else>
-          <router-link to="/login">login</router-link>
-        </template>
-      </nav>
-    </footer>
-  </div>
+    </nav>
+  </footer>
 </template>
 
 <style>
@@ -73,22 +78,46 @@ header {
   font-size: 20px;
   font-weight: bold;
   box-shadow: 0px 4px 9px 0px rgba(194, 194, 194, 0.25);
-  z-index: 1;
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+header img {
+  width: 50px;
+  height: 50px;
+}
+
+header button {
+  height: 100%;
 }
 
 /* Button to create a new post inside Header */
-.btn.new-post {
+.btn .new-post {
   position: absolute;
   right: 10px;
   top: 10px;
 }
 
+/******************************* MAIN *******************************/
+
+main {
+  padding: 20px 8px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
 /******************************* NAVIGATION *******************************/
 footer {
   bottom: 0;
-  position: fixed;
+  position: sticky;
   width: 100%;
 }
+
 /* Bottom Navigation menu wrapper */
 .menu {
   display: flex;
@@ -122,7 +151,7 @@ footer {
 }
 
 /* Profile image style */
-.profile-img {
+.nav-profile-img {
   width: 30px;
   height: 30px;
   border-radius: 50%;

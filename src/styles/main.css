@@ -5,8 +5,8 @@
   --secondary-color: #1a1d52;
   --grey-color: grey;
   --light-color: #bfbfbf;
-  --font-family: "Lexend Deca", system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-family: var(--font-family);
+  /* --font-family: "Lexend Deca", system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  /* font-family: var(--font-family); */
   line-height: 1.5;
   font-weight: 400;
 }

@@ -210,7 +210,7 @@ onMounted(() => {
 }
 
 /* Load more posts button */
-.btn.load-more {
+.btn .load-more {
   margin: 10px auto;
   min-width: 200px;
 }
