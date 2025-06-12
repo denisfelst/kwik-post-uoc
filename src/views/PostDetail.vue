@@ -77,9 +77,11 @@ const isReplyFormVisible = ref(false);
 const replyContent = ref("");
 const isSubmittingReply = ref(false);
 
-// Compute if the post belongs to current user
+// Re-compute if the post belongs to current user
 const isCurrentUserPost = computed(() => {
-  if (!post.value || !authStore.user) return false;
+  if (!post.value || !authStore.user) {
+    return false;
+  }
   return post.value.userId === authStore.user.id;
 });
 
@@ -96,7 +98,9 @@ const fetchPost = async () => {
 };
 
 const handleReply = async () => {
-  if (isSubmittingReply.value || !replyContent.value.trim()) return;
+  if (isSubmittingReply.value || !replyContent.value.trim()) {
+    return;
+  }
 
   isSubmittingReply.value = true;
   try {
@@ -135,14 +139,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Post style in this view */
 .main-post {
   border: 1px solid #ddd;
   border-radius: 20px;
   padding: 10px;
 }
 
-/* Wrapper for actions like remove post or edit post */
 .actions-wrapper {
   display: flex;
   justify-content: flex-end;
@@ -151,7 +153,6 @@ onMounted(() => {
   margin-right: 10px;
 }
 
-/* Replies list style */
 .replies-list {
   margin: 20px 0;
   border-left: 2px solid var(--primary-color);

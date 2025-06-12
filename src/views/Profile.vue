@@ -1,9 +1,7 @@
 <template>
   <div class="profile">
-    <!-- Loading state -->
     <div v-if="isLoadingMore">Loading posts...</div>
 
-    <!-- Error state -->
     <div v-else-if="error">{{ error }}</div>
 
     <div v-else>
@@ -12,29 +10,37 @@
           <div class="user-info__avatar">
             <img :src="profile.profileImg" alt="profile picture of user" />
           </div>
+
           <div class="user-info__fullname">
             <span>{{ profile.name }} {{ profile.surname }}</span>
           </div>
+
           <div class="user-info__username">
             <span>@{{ profile.username }}</span>
           </div>
+
           <div class="user-info__bio">
             <span
               >Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Quisquam, quos.</span
             >
           </div>
+
           <div class="user-info__join-date">
             <span
               >Joined in
               {{
-                new Date(authStore.registrationDate).toLocaleString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })
+                new Date(authStore.user.registrationDate).toLocaleString(
+                  "en-US",
+                  {
+                    month: "long",
+                    year: "numeric",
+                  }
+                )
               }}</span
             >
           </div>
+
           <div
             class="btn load-more logout-btn"
             v-if="route.params.username === authStore.user?.username"
@@ -43,16 +49,19 @@
           </div>
         </div>
 
+        <!-- TODO: refactor with postCard component, adding a withImage/withUserInfo prop since profile card posts have no img, name etc -->
         <div class="posts">
           <div v-for="post in posts" :key="post.id" class="post">
             <router-link :to="'/post/' + post.id">
               <div class="post-detail">
                 <p>{{ post.content }}</p>
+
                 <p class="time">
                   {{ new Date(post.publishDate).toLocaleDateString() }}
                   {{ new Date(post.publishDate).toLocaleTimeString() }}
                 </p>
               </div>
+
               <div class="interactions">
                 <span class="icon">{{ post.nLikes ?? "0" }} Likes</span
                 ><span class="icon">{{ post.nReplies ?? "0" }} Replies</span>
@@ -60,7 +69,6 @@
             </router-link>
           </div>
 
-          <!-- Load more button -->
           <button
             v-if="hasMorePosts"
             @click="loadPosts"
@@ -87,7 +95,7 @@ const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 
-const profile = ref(null);
+const profile = ref(null); // user
 const posts = ref([]);
 const offset = ref(0);
 const isLoadingMore = ref(false);
@@ -100,7 +108,7 @@ const loadUser = async () => {
     const { data } = await api.get(`/user/${route.params.username}`);
     profile.value = data;
   } catch (err) {
-    console.log("Error: ", err);
+    console.log("Error loading user: ", err);
     error.value = "Failed to load user. Please try again.";
   }
 };
@@ -115,6 +123,7 @@ const loadPosts = async () => {
       `/user/${route.params.username}/posts?limit=${limit}&offset=${offset.value}`
     );
 
+    // TODO: use resolveData()?
     if (!data || data.result.length === 0) {
       hasMorePosts.value = false;
       return;
@@ -149,7 +158,6 @@ onMounted(() => {
 <style scoped>
 /******************************* POST *******************************/
 
-/* Post container */
 .post {
   display: flex;
   flex-direction: column;
@@ -158,16 +166,13 @@ onMounted(() => {
   position: relative;
   cursor: pointer;
   margin: 4px 8px;
-  /* border-bottom: 1px solid #e0e0e0; */
 }
 
-/* Link inside a post */
 .post a {
   text-decoration: none;
   color: inherit !important;
 }
 
-/* Post content container */
 .post-detail {
   margin-bottom: 10px;
 }
@@ -181,7 +186,6 @@ onMounted(() => {
   font-size: 12px;
 }
 
-/* Contains likes and replies count and buttons*/
 .interactions {
   display: flex;
   justify-content: flex-start;
@@ -195,14 +199,11 @@ onMounted(() => {
 
 /******************************* PAGINATED POSTS LIST *******************************/
 
-/* Posts list container */
 .posts-list {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-
-/* Post container */
 
 .post {
   margin-top: 10px;
@@ -213,7 +214,6 @@ onMounted(() => {
   padding-bottom: 20px;
 }
 
-/* Load more posts button */
 .btn.load-more {
   margin: 10px auto;
   min-width: 200px;
@@ -227,7 +227,6 @@ onMounted(() => {
 
 /******************************* PROFILE VIEW *******************************/
 
-/* Header of the profile page */
 .user-info {
   display: flex;
   flex-direction: column;
@@ -260,7 +259,6 @@ onMounted(() => {
   color: #555;
 }
 
-/* Avatar */
 .user-info__avatar {
   width: 80px;
   height: 80px;

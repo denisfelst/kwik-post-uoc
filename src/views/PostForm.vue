@@ -1,11 +1,13 @@
 <template>
   <div class="form-post">
     <h1>{{ isEditing ? "Edit Post" : "Create New Post" }}</h1>
+
     <p v-if="error">Error updating post. Try again later.</p>
+
     <form @submit.prevent="handleSubmit" class="form-post__form">
       <div class="form-post__form-content">
         <img
-          :src="authStore.profileImg"
+          :src="authStore.user.profileImg"
           alt="profile picture of user"
           class="form-post__image"
         />
@@ -72,7 +74,6 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-/* Post form main container */
 .form-post {
   display: flex;
   flex-direction: column;
@@ -84,7 +85,6 @@ const handleSubmit = async () => {
   position: relative;
 }
 
-/* Image of the user */
 .form-post__image {
   flex-shrink: 0;
   width: 30px;
@@ -92,7 +92,6 @@ const handleSubmit = async () => {
   border-radius: 50%;
 }
 
-/* Form */
 .form-post__form {
   flex: 1;
   display: flex;

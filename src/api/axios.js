@@ -2,6 +2,7 @@ import axios from "axios";
 
 // Create axios instance
 const api = axios.create({
+  // Could be stored in .env but kept like this for simplicity purposes
   baseURL: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
@@ -20,8 +21,8 @@ export const setAuthToken = (token) => {
 // Response interceptor for API calls
 api.interceptors.response.use(
   async (response) => {
-    // Add artificial delay of 1500ms
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // Add artificial delay of 750ms for demonstration purposes
+    await new Promise((resolve) => setTimeout(resolve, 750));
     return response;
   },
   async (error) => {

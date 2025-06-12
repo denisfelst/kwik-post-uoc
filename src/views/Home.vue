@@ -2,34 +2,29 @@
   <div class="home">
     <template v-if="authStore.isAuthenticated">
       <h1>Feed</h1>
+
       <p v-if="!isLoadingMore">({{ posts.length }} of {{ totalPosts }})</p>
 
-      <!-- Loading state -->
       <div v-if="isLoadingMore">Loading posts...</div>
 
-      <!-- Error state -->
       <div v-else-if="error" class="error">{{ error }}</div>
 
-      <!-- Posts list -->
-      <div v-else>
-        <div class="posts-list">
-          <PostCard v-for="post in posts" :key="post.id" :post="post" />
+      <div v-else class="posts-list">
+        <PostCard v-for="post in posts" :key="post.id" :post="post" />
 
-          <!-- Load more button -->
-          <button
-            v-if="hasMorePosts"
-            @click="loadPosts"
-            :disabled="isLoadingMore"
-            class="btn load-more"
-          >
-            {{ isLoadingMore ? "Loading more..." : "Load more" }}
-          </button>
-        </div>
+        <button
+          v-if="hasMorePosts"
+          @click="loadPosts"
+          :disabled="isLoadingMore"
+          class="btn load-more"
+        >
+          {{ isLoadingMore ? "Loading more..." : "Load more" }}
+        </button>
       </div>
     </template>
 
     <template v-else>
-      <h3>
+      <h3 class="login-invite">
         <router-link to="/login">Login</router-link> to connect with your
         community.
       </h3>
@@ -54,16 +49,32 @@ const offset = ref(0);
 const hasMorePosts = ref(true);
 const totalPosts = ref(0);
 
-const loadPosts = async () => {
-  if (isLoadingMore.value) return;
+// const resolveData = async(data) => { // TODO: Async?
+//   if (!data || data.result.length === 0) {
+//     hasMorePosts.value = false;
+//     return;
+//   }
 
-  isLoadingMore.value = true;
+//   if (posts.value.length === 0) {
+//     totalPosts.value = data.paginator.total;
+//     posts.value = data.result;
+//   } else {
+//     posts.value = [...posts.value, ...data.result];
+//   }
+// };
+
+const loadPosts = async () => {
+  if (isLoadingMore.value) {
+    return;
+  }
 
   try {
     const { data } = await api.get(
       `/posts?limit=${limit}&offset=${offset.value}`
     );
-    console.log("data::: ", data);
+    // TODO: Await?
+    // TODO: Check if refactor works?
+    // await resolveData(data);
 
     if (!data || data.result.length === 0) {
       hasMorePosts.value = false;
@@ -94,7 +105,6 @@ onMounted(() => {
 <style scoped>
 /******************************* POST *******************************/
 
-/* Post container */
 .post {
   display: flex;
   flex-direction: column;
@@ -103,16 +113,13 @@ onMounted(() => {
   position: relative;
   cursor: pointer;
   margin: 4px 8px;
-  /* border-bottom: 1px solid #e0e0e0; */
 }
 
-/* Link inside a post */
 .post a {
   text-decoration: none;
   color: inherit !important;
 }
 
-/* Post user info container */
 .user-info {
   display: flex;
   flex-direction: row;
@@ -137,7 +144,6 @@ onMounted(() => {
   border-radius: 50%;
 }
 
-/* Post content container */
 .post-detail {
   margin-bottom: 10px;
 }
@@ -157,7 +163,6 @@ onMounted(() => {
   text-align: center;
 }
 
-/* Contains likes and replies count and buttons*/
 .interactions {
   display: flex;
   justify-content: flex-start;
@@ -171,14 +176,11 @@ onMounted(() => {
 
 /******************************* PAGINATED POSTS LIST *******************************/
 
-/* Posts list container */
 .posts-list {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-
-/* Post container */
 
 .post {
   margin-top: 10px;
@@ -189,9 +191,13 @@ onMounted(() => {
   padding-bottom: 20px;
 }
 
-/* Load more posts button */
 .btn .load-more {
   margin: 10px auto;
   min-width: 200px;
+}
+
+.login-invite {
+  padding: 4px 20px;
+  text-align: center;
 }
 </style>

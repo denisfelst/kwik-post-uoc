@@ -17,7 +17,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener("auth:expired", handleAuthExpired);
+  // TODO: check if this solves bug
+  // window.removeEventListener("auth:expired", handleAuthExpired);
 });
 </script>
 
@@ -33,9 +34,11 @@ onUnmounted(() => {
       >
     </template>
   </header>
+
   <main>
     <router-view></router-view>
   </main>
+
   <footer>
     <nav class="menu">
       <router-link to="/">
@@ -44,9 +47,9 @@ onUnmounted(() => {
       <template v-if="authStore.isAuthenticated">
         |
         <router-link :to="'/profile/' + authStore.user?.username">
-          <template v-if="authStore.profileImg">
+          <template v-if="authStore.user.profileImg">
             <img
-              :src="authStore.profileImg"
+              :src="authStore.user.profileImg"
               alt="profile"
               class="nav-profile-img"
             />
@@ -71,7 +74,6 @@ onUnmounted(() => {
 
 /******************************* HEADER *******************************/
 
-/* Header of the application */
 header {
   padding: 10px;
   text-align: center;
@@ -96,7 +98,6 @@ header button {
   height: 100%;
 }
 
-/* Button to create a new post inside Header */
 .btn .new-post {
   position: absolute;
   right: 10px;
@@ -145,12 +146,10 @@ footer {
   color: var(--grey-color);
 }
 
-/* Active nav button style */
 .menu-link.active {
   color: var(--primary-color);
 }
 
-/* Profile image style */
 .nav-profile-img {
   width: 30px;
   height: 30px;

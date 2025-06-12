@@ -4,26 +4,23 @@ import { setAuthToken } from "../api/axios";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     isAuthenticated: false,
-    user: null,
     token: null,
-    profileImg: null,
-    registrationDate: null,
-    name: null,
-    surname: null,
-    username: null,
+    user: null,
+    // profileImg: null,
+    // registrationDate: null,
+    // name: null,
+    // surname: null,
+    // username: null,
   }),
 
   actions: {
     login({ user, token }) {
-      console.log("login", user, token);
+      console.log("Login: ", user, token);
+
       this.isAuthenticated = true;
       this.user = user;
       this.token = token;
-      this.profileImg = user.profileImg;
-      this.registrationDate = user.registrationDate;
-      this.name = user.name;
-      this.surname = user.surname;
-      this.username = user.username;
+
       // Set token in API instance
       setAuthToken(token);
       // Store token in localStorage for persistence
@@ -32,14 +29,12 @@ export const useAuthStore = defineStore("auth", {
 
     logout() {
       this.isAuthenticated = false;
-      this.user = null;
       this.token = null;
-      this.profileImg = null;
-      this.registrationDate = null;
-      this.surname = null;
-      this.username = null;
+      this.user = null;
+
       // Remove token from API instance
       setAuthToken(null);
+
       // Remove token from localStorage
       localStorage.removeItem("auth_token");
     },
@@ -53,7 +48,18 @@ export const useAuthStore = defineStore("auth", {
         this.token = token;
         this.isAuthenticated = true;
         // TODO: Fetch user data using token if needed
+        // fetch data and set user value?
       }
     },
+
+    // loadUser = async () => {
+    //   try {
+    //     const { data } = await api.get(`/user/${route.params.username}`);
+    //     profile.value = data;
+    //   } catch (err) {
+    //     console.log("Error: ", err);
+    //     error.value = "Failed to load user. Please try again.";
+    //   }
+    // };
   },
 });
