@@ -122,7 +122,6 @@ const authStore = useAuthStore();
 const post = ref(null);
 const isLoading = ref(true);
 const error = ref(null);
-const isLiking = ref(false);
 const isReplyFormVisible = ref(false);
 const replyContent = ref("");
 const isSubmittingReply = ref(false);
