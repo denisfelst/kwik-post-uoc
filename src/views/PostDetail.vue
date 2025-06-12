@@ -8,42 +8,7 @@
 
     <!-- Post content -->
     <div v-else-if="post" class="main-post">
-      <!-- Author info section -->
-      <div class="author-info">
-        <router-link :to="`/profile/${post.user.username}`">
-          <img
-            :src="post.user.profileImg"
-            :alt="post.user.username"
-            class="author-avatar"
-          />
-          <div class="author-details">
-            <span class="author-name"
-              >{{ post.user.name }} {{ post.user.surname }}</span
-            >
-            <span class="author-username has-color-grey has-text-small"
-              >@{{ post.user.username }}</span
-            >
-          </div>
-        </router-link>
-      </div>
-
-      <!-- Post content section -->
-      <div class="post-body">
-        <p>{{ post.content }}</p>
-      </div>
-
-      <!-- Post metadata -->
-      <div class="post-meta">
-        <span class="post-date has-color-light has-text-small">
-          {{ new Date(post.publishDate).toLocaleString() }}
-        </span>
-        <div class="post-stats">
-          <span class="likes has-color-grey">{{ post.nLikes }} likes</span>
-          <span class="replies has-color-grey"
-            >{{ post.nReplies }} replies</span
-          >
-        </div>
-      </div>
+      <PostCard :post="post" />
 
       <!-- Action buttons -->
       <div class="actions-wrapper">
@@ -85,22 +50,7 @@
       <!-- Replies section -->
       <div v-if="post.replies.length > 0" class="replies-list">
         <h3>Replies</h3>
-        <div v-for="reply in post.replies" :key="reply.id" class="reply">
-          <div class="reply-author">
-            <router-link :to="`/profile/${reply.user.username}`">
-              <img
-                :src="reply.user.profileImg"
-                :alt="reply.user.username"
-                class="reply-avatar"
-              />
-              <span>{{ reply.user.name }}</span>
-            </router-link>
-          </div>
-          <div class="reply-content">{{ reply.content }}</div>
-          <div class="reply-date">
-            {{ new Date(reply.publishDate).toLocaleString() }}
-          </div>
-        </div>
+        <PostCard v-for="reply in post.replies" :key="reply.id" :post="reply" />
       </div>
     </div>
 
@@ -114,6 +64,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 import api from "../api/axios";
+import PostCard from "../shared/PostCard.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -188,6 +139,7 @@ onMounted(() => {
 .main-post {
   border: 1px solid #ddd;
   border-radius: 20px;
+  padding: 10px;
 }
 
 /* Wrapper for actions like remove post or edit post */
@@ -201,14 +153,12 @@ onMounted(() => {
 
 /* Replies list style */
 .replies-list {
-  margin: 0 20px;
+  margin: 20px 0;
+  border-left: 2px solid var(--primary-color);
 }
 
-.reply {
-  padding: 10px 5px;
-}
-
-.reply:not(:last-child) {
-  border-bottom: 1px solid #ddd;
+.replies-list h3 {
+  margin: 0 20px 10px;
+  color: var(--grey-color);
 }
 </style>

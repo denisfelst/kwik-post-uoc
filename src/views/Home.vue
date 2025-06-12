@@ -13,47 +13,18 @@
       <!-- Posts list -->
       <div v-else>
         <div class="posts-list">
-          <div v-for="post in posts" :key="post.id" class="post">
-            <router-link :to="'/post/' + post.id">
-              <div class="user-info">
-                <router-link :to="'/profile/' + post.user.username">
-                  <img
-                    class="user-info__avatar"
-                    :src="post.user.profileImg"
-                    :alt="`profile img of ${post.user.username}`"
-                  />
-                </router-link>
+          <PostCard v-for="post in posts" :key="post.id" :post="post" />
 
-                <router-link :to="'/profile/' + post.user.username">
-                  <div class="user-info__user">
-                    <span> {{ post.user.name }} {{ post.user.surname }} </span>
-                    <span class="username">@{{ post.user.username }}</span>
-                  </div>
-                </router-link>
-              </div>
-              <div class="post-detail">
-                <p>{{ post.content }}</p>
-                <p class="time">
-                  {{ new Date(post.publishDate).toLocaleString() }}
-                </p>
-              </div>
-              <div class="interactions">
-                <span class="icon">{{ post.nLikes ?? "0" }} Likes</span
-                ><span class="icon">{{ post.nReplies ?? "0" }} Replies</span>
-              </div>
-            </router-link>
-          </div>
+          <!-- Load more button -->
+          <button
+            v-if="hasMorePosts"
+            @click="loadPosts"
+            :disabled="isLoadingMore"
+            class="btn load-more"
+          >
+            {{ isLoadingMore ? "Loading more..." : "Load more" }}
+          </button>
         </div>
-
-        <!-- Load more button -->
-        <button
-          v-if="hasMorePosts"
-          @click="loadPosts"
-          :disabled="isLoadingMore"
-          class="btn load-more"
-        >
-          {{ isLoadingMore ? "Loading more..." : "Load more" }}
-        </button>
       </div>
     </template>
 
@@ -70,6 +41,7 @@
 import { ref, onMounted } from "vue";
 import api from "../api/axios";
 import { useAuthStore } from "../stores/auth";
+import PostCard from "../shared/PostCard.vue";
 
 const limit = 10;
 
@@ -91,6 +63,7 @@ const loadPosts = async () => {
     const { data } = await api.get(
       `/posts?limit=${limit}&offset=${offset.value}`
     );
+    console.log("data::: ", data);
 
     if (!data || data.result.length === 0) {
       hasMorePosts.value = false;
