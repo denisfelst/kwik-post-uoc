@@ -35,6 +35,12 @@
               }}</span
             >
           </div>
+          <div
+            class="btn load-more logout-btn"
+            v-if="route.params.username === authStore.user?.username"
+          >
+            <button @click="handleLogout">Logout</button>
+          </div>
         </div>
 
         <div class="posts">
@@ -65,13 +71,6 @@
           </button>
         </div>
       </template>
-    </div>
-
-    <div
-      class="btn--logout"
-      v-if="route.params.username === authStore.user?.username"
-    >
-      <button @click="handleLogout">logout</button>
     </div>
   </div>
 </template>
@@ -213,13 +212,13 @@ onMounted(() => {
 .btn.load-more {
   margin: 10px auto;
   min-width: 200px;
+  text-align: center;
 }
 
-/* .logout-btn {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: center;
-} */
+.btn.logout-btn {
+  background-color: #aa0000;
+  color: #fff;
+}
 
 /******************************* PROFILE VIEW *******************************/
 
@@ -267,16 +266,5 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* Logout button */
-/* Logout button */
-.btn--logout {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
 }
 </style>

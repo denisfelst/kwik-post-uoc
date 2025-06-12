@@ -105,7 +105,7 @@ const handleSubmit = async () => {
 }
 
 .form-post__form .btn--share {
-  justify-self: c;
+  justify-self: center;
 }
 
 .form-post__form textarea {
