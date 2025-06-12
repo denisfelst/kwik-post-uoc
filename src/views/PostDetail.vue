@@ -161,4 +161,14 @@ onMounted(() => {
   margin: 0 20px 10px;
   color: var(--grey-color);
 }
+
+.reply-form {
+  margin: 20px 0;
+}
+
+.reply-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+}
 </style>
