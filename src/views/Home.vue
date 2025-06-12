@@ -105,6 +105,7 @@ const loadPosts = async () => {
     }
   } catch (err) {
     console.error("Error loading posts:", err);
+    error.value = "Failed to load posts. Please try again.";
   } finally {
     isLoadingMore.value = false;
     offset.value += limit;

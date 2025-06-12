@@ -159,6 +159,7 @@ const handleReply = async () => {
     cancelReply();
   } catch (err) {
     console.error("Error submitting reply:", err);
+    error.value = "Failed to submit reply. Please try again.";
   } finally {
     isSubmittingReply.value = false;
   }
@@ -170,6 +171,7 @@ const handleDelete = async () => {
     router.push("/");
   } catch (err) {
     console.error("Error deleting post:", err);
+    error.value = "Failed to delete post. Please try again.";
   }
 };
 const cancelReply = () => {

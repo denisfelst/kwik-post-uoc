@@ -65,8 +65,8 @@ const handleSubmit = async () => {
     }
     router.push("/");
   } catch (err) {
-    error.value = true;
-    console.error("Error handling post: ", err);
+    error.value = "Failed to update post. Please try again.";
+    console.error("Error updating post: ", err);
   }
 };
 </script>

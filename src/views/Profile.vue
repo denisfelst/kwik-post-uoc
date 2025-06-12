@@ -10,13 +10,13 @@
       <template v-if="profile">
         <div class="user-info">
           <div class="user-info__avatar">
-            <img :src="authStore.profileImg" alt="profile picture of user" />
+            <img :src="profile.profileImg" alt="profile picture of user" />
           </div>
           <div class="user-info__fullname">
-            <span>{{ authStore.user.name }} {{ authStore.user.surname }}</span>
+            <span>{{ profile.name }} {{ profile.surname }}</span>
           </div>
           <div class="user-info__username">
-            <span>@{{ authStore.user.username }}</span>
+            <span>@{{ profile.username }}</span>
           </div>
           <div class="user-info__bio">
             <span
@@ -95,6 +95,16 @@ const hasMorePosts = ref(true);
 const totalPosts = ref(0);
 const error = ref(null);
 
+const loadUser = async () => {
+  try {
+    const { data } = await api.get(`/user/${route.params.username}`);
+    profile.value = data;
+  } catch (err) {
+    console.log("Error: ", err);
+    error.value = "Failed to load user. Please try again.";
+  }
+};
+
 const loadPosts = async () => {
   if (isLoadingMore.value) return;
 
@@ -116,12 +126,6 @@ const loadPosts = async () => {
     } else {
       posts.value = [...posts.value, ...data.result];
     }
-
-    profile.value = {
-      username: route.params.username,
-      posts: posts.value.length,
-      joinDate: new Date().toLocaleDateString(),
-    };
   } catch (err) {
     error.value = "Failed to load more posts. Please try again.";
   } finally {
@@ -137,6 +141,7 @@ const handleLogout = () => {
 };
 
 onMounted(() => {
+  loadUser();
   loadPosts();
 });
 </script>

@@ -50,6 +50,7 @@ const handleLogin = async () => {
     const redirectPath = "/profile/" + data.data.user.username;
     router.push(redirectPath);
   } catch (err) {
+    console.error("Error logging in:", err);
     error.value = err.response?.data?.message || "Invalid credentials";
   } finally {
     isLoading.value = false;
