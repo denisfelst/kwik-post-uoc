@@ -8,7 +8,7 @@
 
     <!-- Post content -->
     <div v-else-if="post" class="main-post">
-      <PostCard :post="post" />
+      <PostCard :post="post" :with-user-info="true" />
 
       <!-- Action buttons -->
       <div class="actions-wrapper">
@@ -50,7 +50,12 @@
       <!-- Replies section -->
       <div v-if="post.replies.length > 0" class="replies-list">
         <h3>Replies</h3>
-        <PostCard v-for="reply in post.replies" :key="reply.id" :post="reply" />
+        <PostCard
+          v-for="reply in post.replies"
+          :with-user-info="true"
+          :key="reply.id"
+          :post="reply"
+        />
       </div>
     </div>
 

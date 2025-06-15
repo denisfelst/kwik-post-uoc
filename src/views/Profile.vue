@@ -49,25 +49,13 @@
           </div>
         </div>
 
-        <!-- TODO: refactor with postCard component, adding a withImage/withUserInfo prop since profile card posts have no img, name etc -->
         <div class="posts">
-          <div v-for="post in posts" :key="post.id" class="post">
-            <router-link :to="'/post/' + post.id">
-              <div class="post-detail">
-                <p>{{ post.content }}</p>
-
-                <p class="time">
-                  {{ new Date(post.publishDate).toLocaleDateString() }}
-                  {{ new Date(post.publishDate).toLocaleTimeString() }}
-                </p>
-              </div>
-
-              <div class="interactions">
-                <span class="icon">{{ post.nLikes ?? "0" }} Likes</span
-                ><span class="icon">{{ post.nReplies ?? "0" }} Replies</span>
-              </div>
-            </router-link>
-          </div>
+          <PostCard
+            v-for="post in posts"
+            :key="post.id"
+            :post="post"
+            :with-user-info="false"
+          />
 
           <button
             v-if="hasMorePosts"
@@ -88,6 +76,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "../api/axios";
 import { useAuthStore } from "../stores/auth";
+import PostCard from "../shared/PostCard.vue";
 
 const limit = 10;
 
@@ -147,6 +136,7 @@ const loadPosts = async () => {
 };
 
 const handleLogout = () => {
+  console.log("logout");
   authStore.logout();
   router.push("/");
 };

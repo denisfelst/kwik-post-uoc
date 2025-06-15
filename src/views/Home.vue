@@ -10,7 +10,12 @@
       <div v-else-if="error" class="error">{{ error }}</div>
 
       <div v-else class="posts-list">
-        <PostCard v-for="post in posts" :key="post.id" :post="post" />
+        <PostCard
+          v-for="post in posts"
+          :key="post.id"
+          :post="post"
+          :with-user-info="true"
+        />
 
         <button
           v-if="hasMorePosts"

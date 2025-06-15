@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <router-link :to="'/post/' + post?.id">
-      <div class="user-info">
+      <div v-if="withUserInfo" class="user-info">
         <router-link :to="'/profile/' + post?.user?.username">
           <img
             class="user-info__avatar"
@@ -39,22 +39,17 @@ const props = defineProps({
     type: Object,
     required: true,
     validator: (post) => {
-      return (
-        post.id &&
-        post.content &&
-        post.publishDate &&
-        post.user?.username &&
-        post.user?.name &&
-        post.user?.surname &&
-        post.user?.profileImg
-      );
+      return post.id && post.content && post.publishDate;
     },
+  },
+  withUserInfo: {
+    type: Boolean,
+    required: false,
   },
 });
 </script>
 
 <style scoped>
-/* Post container */
 .post {
   display: flex;
   flex-direction: column;
@@ -70,13 +65,11 @@ const props = defineProps({
   padding-bottom: 20px;
 }
 
-/* Link inside a post */
 .post a {
   text-decoration: none;
   color: inherit !important;
 }
 
-/* Post user info container */
 .user-info {
   display: flex;
   flex-direction: row;
@@ -101,7 +94,6 @@ const props = defineProps({
   border-radius: 50%;
 }
 
-/* Post content container */
 .post-detail {
   margin-bottom: 10px;
 }
@@ -115,7 +107,6 @@ const props = defineProps({
   font-size: 12px;
 }
 
-/* Contains likes and replies count and buttons*/
 .interactions {
   display: flex;
   justify-content: flex-start;
