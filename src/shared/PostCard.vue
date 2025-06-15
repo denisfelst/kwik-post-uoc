@@ -51,10 +51,6 @@ const props = defineProps({
     },
   },
 });
-
-onMounted(() => {
-  console.log(props.post);
-});
 </script>
 
 <style scoped>

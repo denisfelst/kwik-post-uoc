@@ -47,19 +47,7 @@ export const useAuthStore = defineStore("auth", {
         setAuthToken(token);
         this.token = token;
         this.isAuthenticated = true;
-        // TODO: Fetch user data using token if needed
-        // fetch data and set user value?
       }
     },
-
-    // loadUser = async () => {
-    //   try {
-    //     const { data } = await api.get(`/user/${route.params.username}`);
-    //     profile.value = data;
-    //   } catch (err) {
-    //     console.log("Error: ", err);
-    //     error.value = "Failed to load user. Please try again.";
-    //   }
-    // };
   },
 });

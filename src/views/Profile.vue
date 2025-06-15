@@ -108,8 +108,22 @@ const loadUser = async () => {
     const { data } = await api.get(`/user/${route.params.username}`);
     profile.value = data;
   } catch (err) {
-    console.log("Error loading user: ", err);
+    console.error("Error loading user: ", err);
     error.value = "Failed to load user. Please try again.";
+  }
+};
+
+const resolveData = async (data) => {
+  if (!data || data.result.length === 0) {
+    hasMorePosts.value = false;
+    return;
+  }
+
+  if (posts.value.length === 0) {
+    totalPosts.value = data.paginator.total;
+    posts.value = data.result;
+  } else {
+    posts.value = [...posts.value, ...data.result];
   }
 };
 
@@ -122,19 +136,7 @@ const loadPosts = async () => {
     const { data } = await api.get(
       `/user/${route.params.username}/posts?limit=${limit}&offset=${offset.value}`
     );
-
-    // TODO: use resolveData()?
-    if (!data || data.result.length === 0) {
-      hasMorePosts.value = false;
-      return;
-    }
-
-    if (posts.value.length === 0) {
-      totalPosts.value = data.paginator.total;
-      posts.value = data.result;
-    } else {
-      posts.value = [...posts.value, ...data.result];
-    }
+    await resolveData(data);
   } catch (err) {
     error.value = "Failed to load more posts. Please try again.";
   } finally {

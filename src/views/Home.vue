@@ -49,44 +49,31 @@ const offset = ref(0);
 const hasMorePosts = ref(true);
 const totalPosts = ref(0);
 
-// const resolveData = async(data) => { // TODO: Async?
-//   if (!data || data.result.length === 0) {
-//     hasMorePosts.value = false;
-//     return;
-//   }
+const resolveData = async (data) => {
+  if (!data || data.result.length === 0) {
+    hasMorePosts.value = false;
+    return;
+  }
 
-//   if (posts.value.length === 0) {
-//     totalPosts.value = data.paginator.total;
-//     posts.value = data.result;
-//   } else {
-//     posts.value = [...posts.value, ...data.result];
-//   }
-// };
+  if (posts.value.length === 0) {
+    totalPosts.value = data.paginator.total;
+    posts.value = data.result;
+  } else {
+    posts.value = [...posts.value, ...data.result];
+  }
+};
 
 const loadPosts = async () => {
   if (isLoadingMore.value) {
     return;
   }
 
+  isLoadingMore.value = true;
   try {
     const { data } = await api.get(
       `/posts?limit=${limit}&offset=${offset.value}`
     );
-    // TODO: Await?
-    // TODO: Check if refactor works?
-    // await resolveData(data);
-
-    if (!data || data.result.length === 0) {
-      hasMorePosts.value = false;
-      return;
-    }
-
-    if (posts.value.length === 0) {
-      totalPosts.value = data.paginator.total;
-      posts.value = data.result;
-    } else {
-      posts.value = [...posts.value, ...data.result];
-    }
+    await resolveData(data);
   } catch (err) {
     console.error("Error loading posts:", err);
     error.value = "Failed to load posts. Please try again.";

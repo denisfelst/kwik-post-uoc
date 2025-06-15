@@ -17,8 +17,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // TODO: check if this solves bug
-  // window.removeEventListener("auth:expired", handleAuthExpired);
+  window.removeEventListener("auth:expired", handleAuthExpired);
 });
 </script>
 
